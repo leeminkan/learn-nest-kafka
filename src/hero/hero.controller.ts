@@ -47,7 +47,8 @@ export class HeroController implements OnModuleInit {
     @Ctx() context: KafkaContext,
   ) {
     await new Promise((f) => setTimeout(f, 3000));
-    console.log(JSON.stringify(payload) + ' created');
+    const { offset } = context.getMessage();
+    console.log(JSON.stringify({ payload, offset }) + ' created');
     this.commitOffsets(context);
     //console.log(payload.value + ' created');
   }

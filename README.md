@@ -9,3 +9,10 @@ console.log("new Batch", {
 ```
 
 - node_modules/@nestjs/microservices/server/server-kafka.js
+
+- Curls
+
+```
+curl -X GET http://localhost:3000
+curl -X GET http://localhost:3000/hero
+```
