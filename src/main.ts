@@ -8,6 +8,9 @@ async function bootstrap() {
 
   app.connectMicroservice<MicroserviceOptions>(kafkaServerConfig);
   await app.startAllMicroservices();
+
+  app.enableShutdownHooks();
+
   await app.listen(3000);
 }
 bootstrap();

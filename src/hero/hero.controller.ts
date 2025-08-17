@@ -1,4 +1,11 @@
-import { Controller, Get, Inject, OnModuleInit } from '@nestjs/common';
+import {
+  BeforeApplicationShutdown,
+  Controller,
+  Get,
+  Inject,
+  OnApplicationShutdown,
+  OnModuleInit,
+} from '@nestjs/common';
 import {
   ClientKafka,
   Ctx,
@@ -8,11 +15,21 @@ import {
 } from '@nestjs/microservices';
 
 @Controller('/hero')
-export class HeroController implements OnModuleInit {
+export class HeroController
+  implements OnModuleInit, BeforeApplicationShutdown, OnApplicationShutdown
+{
   constructor(@Inject('HERO_SERVICE') private readonly client: ClientKafka) {}
 
   // @Client(kafkaClientConfig)
   // client: ClientKafka;
+
+  beforeApplicationShutdown(signal?: string) {
+    console.log('Before application shutdown:', signal);
+  }
+
+  onApplicationShutdown(signal?: string) {
+    console.log('onApplicationShutdown:', signal);
+  }
 
   async onModuleInit() {
     // Note: Only for client
@@ -46,11 +63,12 @@ export class HeroController implements OnModuleInit {
     @Payload() payload: any,
     @Ctx() context: KafkaContext,
   ) {
-    await new Promise((f) => setTimeout(f, 3000));
     const { offset } = context.getMessage();
+    console.log('before');
     console.log(JSON.stringify({ payload, offset }) + ' created');
-    this.commitOffsets(context);
-    //console.log(payload.value + ' created');
+    await new Promise((f) => setTimeout(f, 45000));
+    console.log('after');
+    // this.commitOffsets(context);
   }
 
   private async commitOffsets(context: KafkaContext) {

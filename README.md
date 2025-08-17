@@ -16,3 +16,11 @@ console.log("new Batch", {
 curl -X GET http://localhost:3000
 curl -X GET http://localhost:3000/hero
 ```
+
+- Kafka consumer graceful shutdown: When nestjs shutdown, it will call kafkajs consumer.disconnect(). This function will wait for in-flight process to be completed before disconnect.
+
+![Kafka Consumer Graceful Shutdown](docs/assets/kafka-consumer-graceful-shutdown.png)
+
+- If the consumer process is take time, we might got the heartbeat error because of reaching the session timeout.
+
+![Kafka Consumer Graceful Shutdown Timeout Case](docs/assets/kafka-consumer-graceful-shutdown-timeout-case.png)
